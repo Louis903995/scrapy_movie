@@ -3,6 +3,7 @@ from moviescraper.items import MoviesItem
 
 class MoviesSpider(scrapy.Spider):
     name = 'movies'
+    all
     custom_settings = {
         'FEEDS': { 'data.csv': { 'format': 'csv',}}
     }
@@ -14,9 +15,19 @@ class MoviesSpider(scrapy.Spider):
     def parse(self, response):
         product = response.css("")
 
-        book_item =
-        book_item
-        book_item
-        book_item
-        book_item
-        book_item 
+        movie_item = MoviesItem
+        movie_item =
+        movie_item =
+        movie_item =
+        movie_item =
+        movie_item =
+
+        yield movie_item 
+
+class MoviespiderSpider(scrapy, Spider):
+    name = 'moviespider'
+    allowed_domains = ['']
+    start_urls = ['https://www.imdb.com/chart/top/']
+
+    def parse(self, response):
+        pass
