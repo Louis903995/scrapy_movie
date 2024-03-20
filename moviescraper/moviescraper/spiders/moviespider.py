@@ -16,24 +16,45 @@ class MoviesSpider(scrapy.Spider):
         product = response.css("")
 
         movie_item = MovieItem()
-        movie_item["titre"] = product.css("").extract_first()
-        movie_item["titre0riginal"] = response.xpath("")
-        movie_item["score"] = response.xpath("")
-        movie_item["genre"] = response.xpath("")
-        movie_item["année"] = response.xpath("")
-        movie_item['durée'] = response.xpath("")
-        movie_item['description'] = response.xpath("")
-        movie_item['acteurs'] = response.xpath("")
-        movie_item['public'] = response.xpath("")
-        movie_item['pays'] = response.xpath("")
+        movie_item["titre"] = product.css("")
+        movie_item["titre0riginal"] = product.css("")
+        movie_item["score"] = product.css("")
+        movie_item["genre"] = product.css("")
+        movie_item["année"] = product.css("")
+        movie_item['durée'] = product.css("")
+        movie_item['description'] = product.css("")
+        movie_item['acteurs'] = product.css("")
+        movie_item['public'] = product.css("")
+        movie_item['pays'] = product.css("")
 
         yield movie_item 
 
 
-class MoviespiderSpider(scrapy, Spider):
+class MoviespiderSpider(scrapy.Spider):
     name = 'moviespider'
     allowed_domains = ['www.imdb.com']
     start_urls = ['https://www.imdb.com/chart/top/']
 
     def parse(self, response):
-        pass
+        movies = response.css('')
+        for movie in movies:
+            relative_url = response.css('').get()
+
+            if 'catalogue/' in relative_url:
+                next_page_url = '' + relative_url
+            else:
+                next_page_url = '' + relative_url
+            yield response.follow(movie_url, callback=self.parse_movie_page)
+    
+        next_page = response.css('').get()
+        if next_page is None:
+            if 'catalogue/' in next_page:
+                next_page_url = '' + next_page
+            else:
+                next_page_url = '' + relative_url
+            yield response.follow(next_page_url, callback=self.parse)
+
+    def parse_movie_page(self, response):
+
+        table_rows = response.css("")
+
