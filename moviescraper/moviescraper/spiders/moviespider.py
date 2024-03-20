@@ -16,11 +16,11 @@ class MoviesSpider(scrapy.Spider):
         product = response.css("")
 
         movie_item = MoviesItem
+        """movie_item =
         movie_item =
         movie_item =
         movie_item =
-        movie_item =
-        movie_item =
+        movie_item ="""
 
         yield movie_item 
 
