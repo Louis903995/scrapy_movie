@@ -25,7 +25,7 @@ class MoviespiderSpider(scrapy.Spider):
     
     
     
-    def movie(self, response):
+    def parse_movie_page(self, response):
         
         content = response.xpath("//main")
         movie_item = MovieItem()
@@ -39,9 +39,6 @@ class MoviespiderSpider(scrapy.Spider):
         movie_item['durée'] =  content.xpath(".//h1/following-sibling::ul/li[3]//text()").get()
         movie_item['description'] = content.xpath(".//p[@data-testid='plot']//text()").get()
         movie_item['acteurs'] = content.xpath(".//p[@data-testid='plot']/following-sibling::div//li[@data-testid='title-pc-principal-credit'][3]//li//text()").getall()
-        movie_item['public'] = 
         movie_item['pays'] = content.xpath(".//li[@data-testid='title-details-origin']/div[last()]//text()").get()
 
-        yield movie_item
-
-    
+        yield MovieItem
