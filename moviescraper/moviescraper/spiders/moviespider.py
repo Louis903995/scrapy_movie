@@ -1,59 +1,47 @@
 import scrapy
 from moviescraper.items import MovieItem
 
-class MoviesSpider(scrapy.Spider):
-    name = 'movies'
+class MoviespiderSpider(scrapy.Spider):
+    name = "moviespider"
+    allowed_domains = ["www.imdb.com"]
+    start_urls = ["https://www.imdb.com/chart/top/"]
+
     custom_settings = {
-        'FEEDS': { 'data.csv': { 'format': 'csv',}}
+        'FEEDS': {
+            'data.csv': {
+                'format': 'csv',
+            }
+        }
     }
 
-    def start_request(self):
-        url = 'https://www.imdb.com/chart/top/'
-        yield scrapy.Request(url, callback=self.parse)
-
-    
     def parse(self, response):
-        product = response.css("")
-
+      movies = response.xpath("//main//div[@data-testid='chart-layout-main-column']//ul[1]/li")
+  
+      for movie in movies:
+          relative_url = movie.xpath(".//a[last()]/@href").get()
+          if relative_url:
+              movie_url = "https://www.imdb.com/" + relative_url
+              yield scrapy.Request(movie_url, callback=self.parse_movie_page)
+    
+    
+    
+    def movie(self, response):
+        
+        content = response.xpath("//main")
         movie_item = MovieItem()
-        movie_item["titre"] = product.css("")
-        movie_item["titre0riginal"] = product.css("")
-        movie_item["score"] = product.css("")
-        movie_item["genre"] = product.css("")
-        movie_item["année"] = product.css("")  
-        movie_item['durée'] = product.css("")
-        movie_item['description'] = product.css("")
-        movie_item['acteurs'] = product.css("")
-        movie_item['public'] = product.css("")
-        movie_item['pays'] = product.css("")
 
-        yield movie_item 
+        movie_item["url"] = response.url
+        movie_item["titre"] = content.xpath(".//h1/span[@data-testid='hero__primary-text']/text()").get()
+        movie_item["titre_original"] = content.xpath(".//h1/following-sibling::div/text()").get()
+        movie_item["score"] = content.xpath(".//div[@data-testid='hero-rating-bar__aggregate-rating__score']/span[1]/text()").get()
+        movie_item["genre"] = content.xpath(".//div[@data-testid='genres']//text()").getall()
+        movie_item["année"] = content.xpath(".//h1/following-sibling::ul/li[1]//text()").get()
+        movie_item['durée'] =  content.xpath(".//h1/following-sibling::ul/li[3]//text()").get()
+        movie_item['description'] = content.xpath(".//p[@data-testid='plot']//text()").get()
+        movie_item['acteurs'] = content.xpath(".//p[@data-testid='plot']/following-sibling::div//li[@data-testid='title-pc-principal-credit'][3]//li//text()").getall()
+        movie_item['public'] = 
+        movie_item['pays'] = content.xpath(".//li[@data-testid='title-details-origin']/div[last()]//text()").get()
 
+        yield movie_item
 
-class MoviespiderSpider(scrapy.Spider):
-    name = 'moviespider'
-    allowed_domains = ['www.imdb.com']
-    start_urls = ['https://www.imdb.com/chart/top/']
-
-    def parse(self, response):
-        movies = response.css('')
-        for movie in movies:
-            relative_url = response.css('').get()
-
-            if 'catalogue/' in relative_url:
-                next_page_url = '' + relative_url
-            else:
-                next_page_url = '' + relative_url
-            yield response.follow(movie_url, callback=self.parse_movie_page)
     
-        next_page = response.css('').get()
-        if next_page is None:
-            if 'catalogue/' in next_page:
-                next_page_url = '' + next_page
-            else:
-                next_page_url = '' + relative_url
-            yield response.follow(next_page_url, callback=self.parse)
-
-    def parse_movie_page(self, response):
-
-        table_rows = response.css("")
