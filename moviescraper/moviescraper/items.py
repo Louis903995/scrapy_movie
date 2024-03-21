@@ -6,16 +6,16 @@ def duree_en_min(value):
 
 
 class MovieItem(scrapy.Item):
-    Titre = scrapy.Field()
-    Titre0riginal = scrapy.Field()
-    Score = scrapy.Field()
-    Genre = scrapy.Field()
-    Année = scrapy.Field()
-    Durée = scrapy.Field()
-    Descriptions = scrapy.Field()
-    Acteurs = scrapy.Field()
-    Public = scrapy.Field()
-    Pays = scrapy.Field()
+    url = scrapy.Field()
+    titre = scrapy.Field()
+    titre_original = scrapy.Field()
+    score = scrapy.Field()
+    genre = scrapy.Field()
+    annee = scrapy.Field()
+    duree = scrapy.Field()
+    description = scrapy.Field()
+    acteurs = scrapy.Field()
+    pays = scrapy.Field()
 
 class MoviescraperItem(scrapy.Item):
     name = scrapy.Field()
