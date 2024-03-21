@@ -1,4 +1,4 @@
-import scrapy
+ import scrapy
 from moviescraper.items import MovieItem
 
 class MoviespiderSpider(scrapy.Spider):
@@ -42,3 +42,4 @@ class MoviespiderSpider(scrapy.Spider):
         movie_item['pays'] = content.xpath(".//li[@data-testid='title-details-origin']/div[last()]//text()").get()
 
         yield MovieItem
+        
