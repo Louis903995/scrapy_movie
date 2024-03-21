@@ -20,7 +20,7 @@ class MoviesSpider(scrapy.Spider):
         movie_item["titre0riginal"] = product.css("")
         movie_item["score"] = product.css("")
         movie_item["genre"] = product.css("")
-        movie_item["année"] = product.css("")
+        movie_item["année"] = product.css("")  
         movie_item['durée'] = product.css("")
         movie_item['description'] = product.css("")
         movie_item['acteurs'] = product.css("")
@@ -57,4 +57,3 @@ class MoviespiderSpider(scrapy.Spider):
     def parse_movie_page(self, response):
 
         table_rows = response.css("")
-
